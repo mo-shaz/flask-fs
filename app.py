@@ -87,7 +87,6 @@ def register():
         # Check if the user already exists
         # We can do that by checking the email as emails are unique
         try:
-
             # Connect to the database
             connection = connect_db()
             cursor = connection.cursor()
