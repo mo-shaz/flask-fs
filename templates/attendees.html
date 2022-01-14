@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="w-100">
+
+    <h1 class="display-4 m-2">Attendees</h1>
+
+    {% if data %}
+
+    {% for user in data %}
+
+        <div class="border rounded m-2 bg-light">
+            <p class="m-auto p-2"><b>{{ user[0] }}</b> registered on <em>{{ user[1] }}</em></p>
+        </div>
+        
+    {% endfor %}
+
+    {% else %}
+
+    <p class="lead m-2">no attendees registered yet</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

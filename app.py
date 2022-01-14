@@ -1,5 +1,6 @@
 # Package imports
 import os
+import re
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
 import psycopg2
@@ -24,11 +25,29 @@ db_user = os.environ['db_user']
 db_pass = os.environ['db_pass']
 
 
+
+
+#################################################
+#               UTILITY FUNCTIONS               #
+#################################################
+
 # Function used to make the database connection
 def connect_db():
 
         connection = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass)
         return connection
+
+
+# Function to check the validity of emails
+def is_valid(email):
+    # The pattern
+    regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+
+    if re.fullmatch(regex, email):
+        return True
+
+    else:
+        return False
 
 
 # Connect to the database and create a table
@@ -41,7 +60,8 @@ try:
     create_table_query =  """CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             user_name text NOT NULL,
-            email text NOT NULL
+            email text NOT NULL,
+            reg_date date NOT NULL DEFAULT CURRENT_DATE
             );"""
 
     # Execute and commit the query
@@ -66,7 +86,7 @@ except Exception as e:
 @app.route('/')
 def home():
 
-    return 'home_page'
+    return render_template('home.html')
 
 
 # Register page
@@ -77,12 +97,16 @@ def register():
     if request.method == 'POST':
 
         # Get the form data
-        email = request.form.get('email')
-        username = request.form.get('username')
+        email = request.form.get('email') or None
+        username = request.form.get('username') or None
 
         # If form data is empty, return error
         if email == None or username == None:
-            return 'fields are empty', 400
+            return render_template('error.html', data='Error: fields are empty'), 400
+
+        # An additional check for the validity of email
+        if is_valid(email) == False:
+            return render_template('error.html', data='Error: invalid email format'), 400
     
         # Check if the user already exists
         # We can do that by checking the email as emails are unique
@@ -107,27 +131,27 @@ def register():
                 connection.close()
 
                 # return response
-                return 'user registered', 201
+                return render_template('success.html', data='Success: user registered'), 201
 
             else:
                 # Close the connections and return error
                 cursor.close()
                 connection.close()
 
-                return 'user already registered', 400
+                return render_template('error.html', data='Error: user already registered'), 400
 
 
         except Exception as e:
             app.logger.error('Error registering user')
             app.logger.error(e)
 
-            return 'INTERNAL SERVER ERROR', 500
+            return render_template('error.html', data='INTERNAL SERVER ERROR'), 500
 
     
 
     # If it is a GET request
     else:
-        return 'register page'
+        return render_template('register.html') 
 
 
 # Attendees page
@@ -141,7 +165,7 @@ def attendees():
         cursor = connection.cursor()
 
         # Get all the users
-        get_user_query = "SELECT user_name FROM users;"
+        get_user_query = "SELECT user_name, reg_date FROM users;"
         cursor.execute(get_user_query)
         result = cursor.fetchall()
 
@@ -149,11 +173,11 @@ def attendees():
         cursor.close()
         connection.close()
 
-        return 'OK', 200
+        return render_template('attendees.html', data=result), 200
 
     except Exception as e:
         app.logger.error('Error getting users')
         app.logger.error(e)
 
-        return 'INTERNAL SERVER ERROR', 500
+        return render_template('error.html', data='INTERNAL SERVER ERROR'), 500
 

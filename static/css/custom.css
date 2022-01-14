@@ -1,0 +1,10 @@
+/* Resizing */
+
+img {
+    max-height: 200px;
+}
+
+a {
+    min-width: 200px;
+}
+

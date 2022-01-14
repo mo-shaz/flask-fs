@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="display-3">Baking Workshop</h1>
+    <img class="img-fluid mt-3 mb-3" src={{ url_for('static', filename='images/cake.png') }} alt="cake">
+
+    <div class="d-flex flex-column container-fluid mt-3 align-items-center">
+        <p class="lead">Hello there,<br> I am a professional baker who have been baking for a while. I'm conducting a workshop on the 15th of January. It's free and contains hours worth of content that includes new recepies, modern techniques to save baking time and some traditional fermentation techniques. All you have to do to participate is to click on the <b>register button</b> below and add in your email so that we can send you the invite link or you can check out who all are attending the workshop.<br><br>Have a great week.</p>
+
+        <a class="btn btn-outline-dark mt-3 font-monospace" href="/register">register</a>
+        <a class="btn btn-outline-dark mt-3 font-monospace" href="/attendees">attendees</a>
+
+    </div>
+
+    <footer class="mt-4 fw-light">baking since 1999</footer>
+
+{% endblock %}

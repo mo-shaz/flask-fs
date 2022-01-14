@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="border rounded bg-light w-100">
+    {% if data %}
+    <p class="lead text-danger p-3"><b>{{ data }}</b></p>
+    {% else %}
+    <p class="lead text-danger p-2"><b>something went wrong</b></p>
+    {% endif%}
+    </div>
+
+{% endblock %}

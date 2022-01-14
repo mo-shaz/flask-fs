@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="border rounded bg-light w-100">
+    {% if data %}
+    <p class="lead text-success p-3"><b>{{ data }}</b></p>
+    {% else %}
+    <p class="lead text-success p-2"><b>something went wrong</b></p>
+    {% endif%}
+    </div>
+
+    <div class="w-100">
+        <p class="lead mt-2">want to see who else registered?</p>
+        <a class="btn btn-outline-dark font-monospace" href="/attendees">attendees</a>
+    </div>
+
+
+{% endblock %}
