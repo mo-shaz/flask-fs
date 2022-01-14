@@ -1,5 +1,6 @@
 # Package imports
 import os
+import sys
 import re
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
@@ -21,9 +22,15 @@ app = Flask(__name__)
 
 
 # Database Config
-db_name = os.environ['db_name']
-db_user = os.environ['db_user']
-db_pass = os.environ['db_pass']
+try:
+    db_name = os.environ['db_name']
+    db_user = os.environ['db_user']
+    db_pass = os.environ['db_pass']
+
+except Exception as e:
+    app.logger.error('Database configuration failed')
+    app.logger.error(f"Key {e} not found")
+    sys.exit(1)
 
 
 
