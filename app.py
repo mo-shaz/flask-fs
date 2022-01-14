@@ -4,6 +4,7 @@ import re
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
 import psycopg2
+from mailjet_rest import Client
 
 
 
@@ -48,6 +49,43 @@ def is_valid(email):
 
     else:
         return False
+
+# Function to send email using the MailJet service
+def send_mail(attendee_email):
+    # Load the credentials
+    api_key = os.environ['mailjet_key']
+    api_secret = os.environ['mailjet_secret']
+    sender_mail = os.environ['mailjet_email']
+
+    # Initialize the transport
+    transport = Client(auth=(api_key, api_secret), version='v3.1')
+
+    # Construct the mail content
+    data = {
+            'Messages': [
+                {
+                    'From': {
+                        'Email': sender_mail,
+                        'Name': 'Baking Workshop'
+                        },
+                    'To': [
+                        {
+                            'Email': attendee_email,
+                            'Name': 'Workshop Attendee'
+                            }
+                        ],
+                    'Subject': 'Baking Workshop Invite',
+                    'TextPart': 'Hello there Attendee, thanks for registering for the workshop. Hope to see you soon. Have a great day.',
+                    'HTMLPart': '<h4>Hello there,</h4><p>thanks for registering for the workshop. Hope to see you soon.</p>'
+                    }
+                ]
+            }
+
+    # Send the mail
+    response = transport.send.create(data=data)
+    app.logger.info(f"mail_status_code: {response.status_code}")
+
+    return
 
 
 # Connect to the database and create a table
@@ -129,6 +167,12 @@ def register():
                 # Close the connection
                 cursor.close()
                 connection.close()
+
+                ############################
+                # SEND AN EMAIL (OPTIONAL) #
+                ############################
+                if 'mailjet_email' in os.environ and 'mailjet_key' in os.environ and 'mailjet_secret' in os.environ:
+                    send_mail(email)
 
                 # return response
                 return render_template('success.html', data='Success: user registered'), 201

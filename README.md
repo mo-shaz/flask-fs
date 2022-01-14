@@ -18,3 +18,10 @@
 * Run the server in development/debug mode:
 
         FLASK_APP=app.py FLASK_ENV=development flask run
+
+
+* [Additional Feature] You can actually send a real email to the attendee confirming their registration. This can be done using the MailJet service. Just add the required credentials to your environment to activate this feature:
+
+        export mailjet_email=[your-mailjet-email]
+        export mailjet_key=[your-mailjet-api-key]
+        export mailjet_secret=[your-mailjet-secret]
