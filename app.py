@@ -120,6 +120,7 @@ try:
 except Exception as e:
     app.logger.error("Error creating table")
     app.logger.error(e)
+    sys.exit(1)
 
 
 
