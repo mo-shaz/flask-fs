@@ -23,9 +23,7 @@ app = Flask(__name__)
 
 # Database Config
 try:
-    db_name = os.environ['db_name']
-    db_user = os.environ['db_user']
-    db_pass = os.environ['db_pass']
+    db_string = os.environ['DATABASE_URL']
 
 except Exception as e:
     app.logger.error('Database configuration failed')
@@ -42,7 +40,7 @@ except Exception as e:
 # Function used to make the database connection
 def connect_db():
 
-        connection = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass)
+        connection = psycopg2.connect(db_string)
         return connection
 
 
