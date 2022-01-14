@@ -5,6 +5,10 @@
 
         git clone [repo-name]
 
+* Install additional packages:
+
+        pip install -r requirements.txt
+
 * Add environement variables for the database credentials. This can be done either in a <code>.env</code> file or by exporting them into your current terminal instance:
 
         export db_name=[your-db-name]
