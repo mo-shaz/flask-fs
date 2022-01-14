@@ -5,7 +5,7 @@
 
         git clone [repo-name]
 
-* Install additional packages:
+* Install additional packages(use a virtual-env to avoid global install):
 
         pip install -r requirements.txt
 
