@@ -20,8 +20,10 @@
         FLASK_APP=app.py FLASK_ENV=development flask run
 
 
-* [Additional Feature] You can actually send a real email to the attendee confirming their registration. This can be done using the MailJet service. Just add the required credentials to your environment to activate this feature. If you'd like to test this feature out and don't have a MailJet account, check the project environment for the heroku-hosted link and test it out:
+* [Additional Feature] You can actually send a real email to the attendee confirming their registration. This can be done using the MailJet service. Just add the required credentials to your environment to activate this feature:
 
         export mailjet_email=[your-mailjet-email]
         export mailjet_key=[your-mailjet-api-key]
         export mailjet_secret=[your-mailjet-secret]
+
+* If you'd like to test this feature out and don't have a MailJet account, check the project environment for the heroku-hosted (https://flask-full-stack.herokuapp.com/) link and test it out.
